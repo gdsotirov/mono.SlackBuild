@@ -1,0 +1,4 @@
+glib2 >= 2.18.4
+glibc-solibs >= 2.9
+libgdiplus >= 2.4.2
+zlib >= 1.2.3
