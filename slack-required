@@ -1,4 +1,4 @@
-glib2 >= 2.24.1
-glibc-solibs >= 2.11.1
-libgdiplus >= 2.6
-zlib >= 1.2.3
+glib2 >= 2.30.2
+glibc-solibs >= 2.13
+libgdiplus >= 2.10.9
+zlib >= 1.2.5
