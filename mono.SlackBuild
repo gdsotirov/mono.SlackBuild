@@ -19,7 +19,7 @@
 #
 # Visit SlackPack at http://sotirov-bg.net/slackpack/
 #
-# $Id: mono.SlackBuild,v 1.6 2012/08/23 19:27:57 gsotirov Exp $
+# $Id: mono.SlackBuild,v 1.7 2012/08/23 19:47:03 gsotirov Exp $
 #
 
 . ../../slack-package.conf
@@ -95,6 +95,7 @@ install -m 644 $CWD/slack-required $PKG/install/slack-required
 mkdir -p $PKG/usr/src/slackbuilds/$NAME-$VERSION
 install -m 644 $CWD/slack-desc          $PKG/usr/src/slackbuilds/$NAME-$VERSION/slack-desc
 install -m 644 $CWD/slack-required      $PKG/usr/src/slackbuilds/$NAME-$VERSION/slack-required
+install -m 644 $CWD/slack-suggests      $PKG/usr/src/slackbuilds/$NAME-$VERSION/slack-suggests
 install -m 644 $CWD/$NAME.SlackBuild    $PKG/usr/src/slackbuilds/$NAME-$VERSION/$NAME.SlackBuild
 
 # Pack
