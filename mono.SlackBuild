@@ -19,7 +19,7 @@
 #
 # Visit SlackPack at http://sotirov-bg.net/slackpack/
 #
-# $Id: mono.SlackBuild,v 1.7 2012/08/23 19:47:03 gsotirov Exp $
+# $Id: mono.SlackBuild,v 1.8 2012/08/23 20:32:47 gsotirov Exp $
 #
 
 . ../../slack-package.conf
@@ -73,19 +73,14 @@ CXXFLAGS="$SLKCFLAGS -O2" \
             --enable-static=yes || exit 2
 
 # Build & install
-make || exit 3 
-make DESTDIR=$PKG install || exit 3
+make V=1 || exit 3 
+#make validate || exit 4 # fails for missing C# source
+make DESTDIR=$PKG install || exit 5
 
 # Prepare
 bin_perms $PKG
 ( cd $PKG; strip_bin; strip_lib )
 ( cd $SRC; create_docs $PKG $NAME-$VERSION )
-# Fix man pages location
-( cd $PKG/usr/share/man/;
-  for file in `find . -type f -name *.[123456789]`; do
-    mv $file $PKG/usr/man/$file
-  done;
-  rm -rf $PKG/usr/share/man )
 gzip_man $PKG
 
 mkdir -p $PKG/install
