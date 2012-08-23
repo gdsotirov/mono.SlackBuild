@@ -1,3 +1,5 @@
+cxxlibs >= 6.0.14 | gcc-g++ >= 4.5.2
+gcc >= 4.5.2
 glib2 >= 2.30.2
 glibc-solibs >= 2.13
 libgdiplus >= 2.10.9
