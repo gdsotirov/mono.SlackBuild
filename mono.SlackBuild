@@ -19,7 +19,7 @@
 #
 # Visit SlackPack at http://sotirov-bg.net/slackpack/
 #
-# $Id: mono.SlackBuild,v 1.5 2012/08/22 16:21:28 gsotirov Exp $
+# $Id: mono.SlackBuild,v 1.6 2012/08/23 19:27:57 gsotirov Exp $
 #
 
 . ../../slack-package.conf
@@ -60,8 +60,8 @@ fix_source
 
 # Configure
 autoconf
-CFLAGS=$SLKCFLAGS \
-CXXFLAGS=$SLKCFLAGS \
+CFLAGS="$SLKCFLAGS -O2" \
+CXXFLAGS="$SLKCFLAGS -O2" \
 ./configure --build=$ARCH-slackware-linux \
             --host=$ARCH-slackware-linux \
             --prefix=/usr \
@@ -70,10 +70,10 @@ CXXFLAGS=$SLKCFLAGS \
             --libdir=/usr/lib${LIBDIRSUFFIX} \
             --mandir=/usr/man \
             --enable-shared=yes \
-            --enable-static=no || exit 2
+            --enable-static=yes || exit 2
 
 # Build & install
-make -j4 || exit 3 
+make || exit 3 
 make DESTDIR=$PKG install || exit 3
 
 # Prepare
