@@ -4,11 +4,11 @@
 # Written by Georgi D. Sotirov <gdsotirov@dir.bg>
 #
 
-. ../slack-package.conf
+. ../../slack-package.conf
 
 NAME=mono
 VERSION=2.4.2.3
-BUILD=1
+BUILD=${BUILD:-1}
 ARCH=${ARCH:-i486}
 
 TMP=${TMP:-/tmp}
@@ -50,13 +50,13 @@ CXXFLAGS=$SLKCFLAGS \
             --prefix=/usr \
             --sysconfdir=/etc \
             --localstatedir=/var \
-            --libdir=/usr/lib \
+            --libdir=/usr/lib${LIBDIRSUFFIX} \
             --mandir=/usr/man \
             --enable-shared=yes \
             --enable-static=no || exit 2
 
 # Build
-make -j4 || exit 3 
+make V=1 -j4 || exit 3 
 
 # Install
 make DESTDIR=$PKG install || exit 3
