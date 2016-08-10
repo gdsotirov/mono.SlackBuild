@@ -19,7 +19,7 @@
 #
 # Visit SlackPack at http://sotirov-bg.net/slackpack/
 #
-# $Id: mono.SlackBuild,v 1.10 2016/08/10 09:07:13 gsotirov Exp $
+# $Id: mono.SlackBuild,v 1.11 2016/08/10 11:04:46 gsotirov Exp $
 #
 
 . ../../slack-package.conf
@@ -27,7 +27,11 @@
 NAME=mono
 VERSION=3.12.1
 BUILD=${BUILD:-1}
-ARCH=i686 # fail to compile atomic.h for undefined references (see https://bugzilla.xamarin.com/show_bug.cgi?id=34316)
+ARCH=${ARCH:-i486}
+if [ $ARCH == "i486" -o $ARCH == "i586" ]; then
+  ARCH=i686 # fail to compile atomic.h for undefined references (see https://bugzilla.xamarin.com/show_bug.cgi?id=34316)
+  ADD_CFLAGS="-march=$ARCH"
+fi
 
 TMP=${TMP:-/tmp}
 CWD=${CWD:-`pwd`}
@@ -60,8 +64,8 @@ fix_source
 
 # Configure
 autoconf
-CFLAGS="$SLKCFLAGS -O2 -march=$ARCH" \
-CXXFLAGS="$SLKCFLAGS -O2 -march=$ARCH" \
+CFLAGS="$SLKCFLAGS -O2 $ADD_CFLAGS" \
+CXXFLAGS="$SLKCFLAGS -O2 $ADD_CFLAGS" \
 ./configure --build=$ARCH-slackware-linux \
             --host=$ARCH-slackware-linux \
             --prefix=/usr \
