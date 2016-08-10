@@ -19,13 +19,14 @@
 #
 # Visit SlackPack at http://sotirov-bg.net/slackpack/
 #
-# $Id: mono.SlackBuild,v 1.11 2016/08/10 11:04:46 gsotirov Exp $
+# $Id: mono.SlackBuild,v 1.12 2016/08/10 20:40:57 gsotirov Exp $
 #
 
 . ../../slack-package.conf
 
 NAME=mono
-VERSION=3.12.1
+VERSION=4.6.0
+VERSION_FULL="$VERSION.125"
 BUILD=${BUILD:-1}
 ARCH=${ARCH:-i486}
 if [ $ARCH == "i486" -o $ARCH == "i586" ]; then
@@ -55,7 +56,7 @@ mkdir -p $PKG
 
 # Extract the source
 cd $TMP
-tar -xvf $CWD/$NAME-$VERSION.tar.?z* || exit 3
+tar -xvf $CWD/$NAME-$VERSION_FULL.tar.?z* || exit 3
 cd $SRC
 fix_source
 
@@ -111,24 +112,26 @@ mv $PKG/etc/mono/4.5/web.config     $PKG/etc/mono/4.5/web.config.new
 # Prepare
 bin_perms $PKG
 ( cd $PKG; strip_bin; strip_lib )
-( cd $SRC; create_docs $PKG $NAME-$VERSION )
+( cd $SRC; create_docs $PKG $NAME-$VERSION_FULL )
 gzip_man $PKG
 
 mkdir -p $PKG/install
 install -m 644 $CWD/doinst.sh      $PKG/install/doinst.sh
 install -m 644 $CWD/slack-desc     $PKG/install/slack-desc
 install -m 644 $CWD/slack-required $PKG/install/slack-required
+install -m 644 $CWD/slack-suggests $PKG/install/slack-suggests
 
-mkdir -p $PKG/usr/src/slackbuilds/$NAME-$VERSION
-install -m 644 $CWD/doinst.sh           $PKG/usr/src/slackbuilds/$NAME-$VERSION/doinst.sh
-install -m 644 $CWD/slack-desc          $PKG/usr/src/slackbuilds/$NAME-$VERSION/slack-desc
-install -m 644 $CWD/slack-required      $PKG/usr/src/slackbuilds/$NAME-$VERSION/slack-required
-install -m 644 $CWD/slack-suggests      $PKG/usr/src/slackbuilds/$NAME-$VERSION/slack-suggests
-install -m 644 $CWD/$NAME.SlackBuild    $PKG/usr/src/slackbuilds/$NAME-$VERSION/$NAME.SlackBuild
+SB_DIR=$PKG/usr/src/slackbuilds/$NAME-$VERSION_FULL
+mkdir -p $SB_DIR
+install -m 644 $CWD/doinst.sh        $SB_DIR/doinst.sh
+install -m 644 $CWD/slack-desc       $SB_DIR/slack-desc
+install -m 644 $CWD/slack-required   $SB_DIR/slack-required
+install -m 644 $CWD/slack-suggests   $SB_DIR/slack-suggests
+install -m 644 $CWD/$NAME.SlackBuild $SB_DIR/$NAME.SlackBuild
 
 # Pack
 cd $PKG
-PKGNAME=$NAME-$VERSION-$ARCH-$BUILD$MYIN
+PKGNAME=$NAME-$VERSION_FULL-$ARCH-$BUILD$MYIN
 makepkg -l y -c n -p $PKG_DIR/$PKGNAME.txz
 cd $PKG_DIR
 md5sum $PKGNAME.txz > $PKGNAME.txz.md5
