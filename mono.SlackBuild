@@ -19,15 +19,15 @@
 #
 # Visit SlackPack at http://sotirov-bg.net/slackpack/
 #
-# $Id: mono.SlackBuild,v 1.9 2016/08/09 20:34:50 gsotirov Exp $
+# $Id: mono.SlackBuild,v 1.10 2016/08/10 09:07:13 gsotirov Exp $
 #
 
 . ../../slack-package.conf
 
 NAME=mono
-VERSION=2.11.4
+VERSION=3.12.1
 BUILD=${BUILD:-1}
-ARCH=${ARCH:-i486}
+ARCH=i686 # fail to compile atomic.h for undefined references (see https://bugzilla.xamarin.com/show_bug.cgi?id=34316)
 
 TMP=${TMP:-/tmp}
 CWD=${CWD:-`pwd`}
@@ -51,7 +51,7 @@ mkdir -p $PKG
 
 # Extract the source
 cd $TMP
-tar -xvf $CWD/$NAME-$VERSION.tar.?z* || exit 1
+tar -xvf $CWD/$NAME-$VERSION.tar.?z* || exit 3
 cd $SRC
 fix_source
 
@@ -60,8 +60,8 @@ fix_source
 
 # Configure
 autoconf
-CFLAGS="$SLKCFLAGS -O2" \
-CXXFLAGS="$SLKCFLAGS -O2" \
+CFLAGS="$SLKCFLAGS -O2 -march=$ARCH" \
+CXXFLAGS="$SLKCFLAGS -O2 -march=$ARCH" \
 ./configure --build=$ARCH-slackware-linux \
             --host=$ARCH-slackware-linux \
             --prefix=/usr \
@@ -70,12 +70,12 @@ CXXFLAGS="$SLKCFLAGS -O2" \
             --localstatedir=/var \
             --mandir=/usr/man \
             --enable-shared=yes \
-            --enable-static=yes || exit 2
+            --enable-static=yes || exit 4
 
 # Build & install
-make V=1 -j || exit 3 
-#make validate || exit 4 # fails with errors CS1502, CS1503 and CS1061
-make DESTDIR=$PKG install || exit 5
+make V=1 -j || exit 5
+#make validate || exit 4 # still fails with errors
+make DESTDIR=$PKG install || exit 6
 
 # Rename configuration files to avoid overwritte (if updated, do not 
 # forget to update doinst.sh file as well)
@@ -86,16 +86,20 @@ mv $PKG/etc/mono/2.0/settings.map   $PKG/etc/mono/2.0/settings.map.new
 mv $PKG/etc/mono/2.0/machine.config $PKG/etc/mono/2.0/machine.config.new
 mv $PKG/etc/mono/2.0/web.config     $PKG/etc/mono/2.0/web.config.new
 mv $PKG/etc/mono/2.0/Browsers/Compat.browser \
-	                            $PKG/etc/mono/2.0/Browsers/Compat.browser.new
+                                    $PKG/etc/mono/2.0/Browsers/Compat.browser.new
 mv $PKG/etc/mono/2.0/DefaultWsdlHelpGenerator.aspx \
-	                            $PKG/etc/mono/2.0/DefaultWsdlHelpGenerator.aspx.new
+                                    $PKG/etc/mono/2.0/DefaultWsdlHelpGenerator.aspx.new
+mv $PKG/etc/mono/4.0/Browsers/Compat.browser \
+                                    $PKG/etc/mono/4.0/Browsers/Compat.browser.new
 mv $PKG/etc/mono/4.0/DefaultWsdlHelpGenerator.aspx \
                                     $PKG/etc/mono/4.0/DefaultWsdlHelpGenerator.aspx.new
 mv $PKG/etc/mono/4.0/machine.config $PKG/etc/mono/4.0/machine.config.new
 mv $PKG/etc/mono/4.0/settings.map   $PKG/etc/mono/4.0/settings.map.new
 mv $PKG/etc/mono/4.0/web.config     $PKG/etc/mono/4.0/web.config.new
+mv $PKG/etc/mono/4.5/Browsers/Compat.browser \
+                                    $PKG/etc/mono/4.5/Browsers/Compat.browser.new
 mv $PKG/etc/mono/4.5/DefaultWsdlHelpGenerator.aspx \
-	                            $PKG/etc/mono/4.5/DefaultWsdlHelpGenerator.aspx.new
+                                    $PKG/etc/mono/4.5/DefaultWsdlHelpGenerator.aspx.new
 mv $PKG/etc/mono/4.5/machine.config $PKG/etc/mono/4.5/machine.config.new
 mv $PKG/etc/mono/4.5/settings.map   $PKG/etc/mono/4.5/settings.map.new
 mv $PKG/etc/mono/4.5/web.config     $PKG/etc/mono/4.5/web.config.new
