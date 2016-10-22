@@ -19,14 +19,14 @@
 #
 # Visit SlackPack at http://sotirov-bg.net/slackpack/
 #
-# $Id: mono.SlackBuild,v 1.12 2016/08/10 20:40:57 gsotirov Exp $
+# $Id: mono.SlackBuild,v 1.13 2016/10/22 13:09:35 gsotirov Exp $
 #
 
 . ../../slack-package.conf
 
 NAME=mono
-VERSION=4.6.0
-VERSION_FULL="$VERSION.125"
+VERSION=4.6.1
+VERSION_FULL="$VERSION.5"
 BUILD=${BUILD:-1}
 ARCH=${ARCH:-i486}
 if [ $ARCH == "i486" -o $ARCH == "i586" ]; then
