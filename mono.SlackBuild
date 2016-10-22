@@ -19,7 +19,7 @@
 #
 # Visit SlackPack at http://sotirov-bg.net/slackpack/
 #
-# $Id: mono.SlackBuild,v 1.13 2016/10/22 13:09:35 gsotirov Exp $
+# $Id: mono.SlackBuild,v 1.14 2016/10/22 14:44:50 gsotirov Exp $
 #
 
 . ../../slack-package.conf
@@ -78,7 +78,7 @@ CXXFLAGS="$SLKCFLAGS -O2 $ADD_CFLAGS" \
             --enable-static=yes || exit 4
 
 # Build & install
-make V=1 -j || exit 5
+make V=1 -j${NUMJOBS} || exit 5
 #make validate || exit 4 # still fails with errors
 make DESTDIR=$PKG install || exit 6
 
